@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tradewind Courier</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #8fc7e8; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+  #hud { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  /* Visually hidden, announced by screen readers: the live status line. */
+  #status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  #overlay {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, rgba(6,18,28,0.35), rgba(6,18,28,0.65));
+    padding: 24px; box-sizing: border-box;
+  }
+  #overlay .panel {
+    background: rgba(10, 24, 36, 0.92);
+    border: 1px solid rgba(150, 200, 230, 0.35);
+    border-radius: 14px; padding: 28px 32px; max-width: 560px; width: 100%;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.45); color: #eaf6ff;
+  }
+  #overlay h1 { margin: 0 0 4px; font-size: 30px; letter-spacing: 0.5px; }
+  #overlay .sub { margin: 0 0 18px; color: #7fa8c0; font-size: 15px; }
+  #overlay .row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(150,200,230,0.15); font-size: 16px; }
+  #overlay .row b { color: #f2c94c; }
+  #overlay .hint { margin: 18px 0 0; color: #7fa8c0; font-size: 13px; }
+  #overlay button {
+    font: inherit; cursor: pointer; border-radius: 9px; padding: 10px 16px; margin: 16px 8px 0 0;
+    background: rgba(150,200,230,0.12); color: #eaf6ff; border: 1px solid rgba(150,200,230,0.4);
+  }
+  #overlay button.primary { background: #f2c94c; color: #08131c; border-color: #f2c94c; font-weight: 700; }
+  #overlay button:hover { filter: brightness(1.1); }
+  #overlay .missions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0 6px; }
+  #overlay .missions button { margin: 0; padding: 14px 8px; }
+  #overlay .missions button small { display: block; color: #7fa8c0; font-size: 11px; margin-top: 6px; font-weight: 400; }
+  #overlay .missions button.primary small { color: #08131c; }
+  #overlay ul.controls { list-style: none; padding: 0; margin: 16px 0 0; columns: 2; font-size: 13px; color: #cfe6f5; }
+  #overlay ul.controls li { margin: 4px 0; }
+  #overlay ul.controls kbd {
+    background: rgba(150,200,230,0.18); border-radius: 5px; padding: 1px 6px; font-family: inherit;
+    border: 1px solid rgba(150,200,230,0.35);
+  }
+  #overlay .topbar { display: flex; justify-content: space-between; align-items: center; }
+  #overlay .topbar .best { color: #7fa8c0; font-size: 13px; }
+  #overlay button:focus-visible { outline: 2px solid #f2c94c; outline-offset: 2px; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+<canvas id="game" aria-label="Tradewind Courier: fly a seaplane between islands"></canvas>
+<canvas id="hud" aria-hidden="true"></canvas>
+<p id="status" role="status" aria-live="polite"></p>
+
+<div id="overlay">
+  <div class="panel">
+    <div class="topbar">
+      <h1>Tradewind Courier</h1>
+      <button data-action="mute" aria-pressed="false">Sound: on</button>
+    </div>
+    <p class="sub">A seeded island-hopping seaplane. Pick a run.</p>
+    <div class="missions">
+      <button class="primary" data-mission="ring">Ring Run<small>6 rings vs the clock</small></button>
+      <button data-mission="hop">Island Hop<small>Land on 3 strips</small></button>
+      <button data-mission="courier">Courier<small>Pick up &amp; deliver cargo</small></button>
+    </div>
+    <ul class="controls">
+      <li><kbd>W</kbd>/<kbd>S</kbd> pitch</li>
+      <li><kbd>A</kbd>/<kbd>D</kbd> roll</li>
+      <li><kbd>Shift</kbd>/<kbd>Ctrl</kbd> throttle</li>
+      <li><kbd>Q</kbd>/<kbd>E</kbd> rudder</li>
+      <li><kbd>F</kbd> flaps</li>
+      <li><kbd>G</kbd> gear</li>
+      <li><kbd>C</kbd> camera</li>
+      <li><kbd>P</kbd> pause</li>
+      <li><kbd>R</kbd> restart</li>
+      <li><kbd>M</kbd> mute</li>
+    </ul>
+    <p class="hint">Best <span id="best-line">0</span></p>
+  </div>
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
